@@ -1,20 +1,34 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UiController : MonoBehaviour
 {
-    public Button button;
-    // Start is called before the first frame update
+
     void Start()
     {
-        
+        // افزودن رویداد به دکمه ExitButton
+        Button exitButton = GetComponent<Button>();
+        if (exitButton != null)
+        {
+            exitButton.onClick.AddListener(ExitGame);
+        }
+        else
+        {
+            Debug.LogError("ExitButton Script is not attached to a Button!");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void ExitGame()
     {
-        
+        // خروج از پروژه یونیتی
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
     }
 }
+    
+
