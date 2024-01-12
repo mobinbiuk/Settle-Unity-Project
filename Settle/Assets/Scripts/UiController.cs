@@ -8,7 +8,7 @@ public class UiController : MonoBehaviour
 
     void Start()
     {
-        // افزودن رویداد به دکمه ExitButton
+        // ExitButton
         Button exitButton = GetComponent<Button>();
         if (exitButton != null)
         {
@@ -22,12 +22,15 @@ public class UiController : MonoBehaviour
 
     void ExitGame()
     {
-        // خروج از پروژه یونیتی
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
+        //Exiting unity
+        if (Application.isPlaying)
+        {
+            UnityEditor.EditorApplication.isPlaying = false;
             Application.Quit();
-#endif
+        }
+
+        
+
     }
 }
     
