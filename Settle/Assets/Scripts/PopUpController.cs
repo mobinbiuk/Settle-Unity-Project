@@ -5,29 +5,33 @@ using UnityEngine.UI;
 
 public class PopupController : MonoBehaviour
 {
-    public GameObject popupPanel; // پنل Popup
-    public float delayToShow = 1f; // تاخیر نمایش Popup
-    public float displayTime = 10f; // زمان نمایش Popup در ثانیه
+    [SerializeField] private GameObject popupPanel;
+    private GameObject touchId;
+    
+    private float delayToShow = 1f; 
+    private float displayTime = 5f; 
 
     private void Start()
     {
-        // فراخوانی تابع ShowPopup با تاخیر
+        touchId = GameObject.FindWithTag("TouchIdParent");
         Invoke("ShowPopup", delayToShow);
     }
 
     private void ShowPopup()
     {
-        // نمایش پنل Popup
         popupPanel.SetActive(true);
-
-        // فراخوانی تابع HidePopup با تاخیر بر اساس زمان نمایش
         Invoke("HidePopup", displayTime);
     }
 
     private void HidePopup()
     {
-        // مخفی کردن پنل Popup
         popupPanel.SetActive(false);
+        Invoke("ShowTouchId", delayToShow);
+    }
+    private void ShowTouchId()
+    {
+        Debug.Log("show touchid");
+        touchId.SetActive(true);
     }
 }
 
