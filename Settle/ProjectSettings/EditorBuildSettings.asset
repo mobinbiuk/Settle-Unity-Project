@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OathScene.unity
     guid: 40c6ffef16abc7041bedc0bc29888bfc
+  - enabled: 1
+    path: Assets/Scenes/CoinFlipScene.unity
+    guid: e0bb9d7f5f1aca046aa90155d51bb2d4
   m_configObjects: {}

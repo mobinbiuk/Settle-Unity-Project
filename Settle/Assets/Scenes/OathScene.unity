@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 48245045}
   m_Layer: 5
   m_Name: TouchIdBott
-  m_TagString: Untagged
+  m_TagString: TouchIdParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -226,7 +226,7 @@ RectTransform:
   m_GameObject: {fileID: 512789620}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.55966556, y: 0.42034286, z: 1}
+  m_LocalScale: {x: 0.50537825, y: 0.37956977, z: 0.9030004}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 850199394}
@@ -288,8 +288,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPanel: {fileID: 512789620}
-  delayToShow: 1
-  displayTime: 10
 --- !u!1 &714161136
 GameObject:
   m_ObjectHideFlags: 0
@@ -697,8 +695,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPanel: {fileID: 512789620}
-  delayToShow: 0.5
-  displayTime: 5
 --- !u!4 &1457249321
 Transform:
   m_ObjectHideFlags: 0
@@ -1014,7 +1010,7 @@ GameObject:
   - component: {fileID: 1922132374}
   m_Layer: 5
   m_Name: TouchIdTop
-  m_TagString: Untagged
+  m_TagString: TouchIdParent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1127,8 +1123,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPanel: {fileID: 512789620}
-  delayToShow: 1
-  displayTime: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
