@@ -17,6 +17,7 @@ public class PopupController : MonoBehaviour
     {
         touchId = GameObject.FindWithTag("TouchIdParent");
         StartCoroutine(ShowPopup());
+        BootStrapedData.Instance.test();
         
     }
 
