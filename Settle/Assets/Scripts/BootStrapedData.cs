@@ -10,11 +10,11 @@ public static class PerformBootstrap
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void ExecuteBootstrap()
     {
-        for (int sceneIndex=0; sceneIndex <SceneManager.sceneCount; ++sceneIndex)
+        for (int sceneIndex = 0; sceneIndex < SceneManager.sceneCount; ++sceneIndex)
         {
-            var candidate=SceneManager.GetSceneAt(sceneIndex);
+            var candidate = SceneManager.GetSceneAt(sceneIndex);
             //check if bootstrap is loaded
-            if(candidate.name == sceneName)
+            if (candidate.name == sceneName)
             {
                 return;
             }
@@ -28,7 +28,7 @@ public static class PerformBootstrap
 public class BootStrapedData : MonoBehaviour
 {
     public static BootStrapedData Instance { get; private set; } = null;
-    
+
     void Awake()
     {
         //check if instance exists
@@ -43,9 +43,8 @@ public class BootStrapedData : MonoBehaviour
         //bootstrap scene will remain
         DontDestroyOnLoad(gameObject);
     }
-    public void test() 
+    public void test()
     {
         Debug.Log("bootstrap is working!");
     }
-
 }
