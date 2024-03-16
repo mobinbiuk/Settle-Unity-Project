@@ -13,6 +13,13 @@ public class CoinFlipScene : MonoBehaviour
     private bool playerBotTouched;
     private bool isCheckingForTouches;
     public GameObject playersTouchError;
+    public GameObject countDownParent;
+    public Text countDownText;
+    private float countDownTimer = 3.0f;
+    private bool coinFlipGameRunning = false;
+
+
+   
     private void Start()
     {
         StartCoroutine(ShowOathPopUpAfterDelay(0.5f));
@@ -42,6 +49,10 @@ public class CoinFlipScene : MonoBehaviour
         if (isCheckingForTouches)
         {
             CheckTouchInput();
+        }
+        if (coinFlipGameRunning)
+        {
+            Invoke("StartCountDown",0f);
         }
     }
 
@@ -90,29 +101,24 @@ public class CoinFlipScene : MonoBehaviour
         else
         {
             // Both players touched, start the game
-            StartCoroutine(StartCoinFlipGame(0f));
+            StartCoroutine(StartCoinFlipGame());
         }
     }
 
-    IEnumerator StartCoinFlipGame(float delay)
+    IEnumerator StartCoinFlipGame()
     {
         Debug.Log("Starting CoinFlipGame coroutine...");
-        // Wait for a short delay before starting the coinflip game
-        yield return new WaitForSeconds(delay);
 
-        // Implement your logic to start the coinflip game
-        Debug.Log("Both players touched! Starting the coinflip game...");
-
-        // Stop checking for touches
+        yield return new WaitForSeconds(0.5f);
         isCheckingForTouches = false;
-
-        // Disable touch ids
         touchIds.SetActive(false);
+        coinFlipGameRunning = true;
+        
     }
 
-    IEnumerator ShowPlayersTouchErrorAndReset(float delay)
+    IEnumerator ShowPlayersTouchErrorAndReset(float delay=0.1f)
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(delay);
         playersTouchError.SetActive(true);
         Debug.Log("ShowPlayersTouchErrorAndResets");
 
@@ -124,4 +130,25 @@ public class CoinFlipScene : MonoBehaviour
         // Restart the touch input checking process
         StartCoroutine(CheckPlayersTouchedCoroutine());
     }
+    void StartCountDown()
+    {
+        countDownParent.SetActive(true);
+        countDownTimer -= Time.deltaTime;
+        countDownText.text = (countDownTimer).ToString("0");
+        if (countDownTimer <= 1)
+        {
+            countDownText.text = (1).ToString("0");
+            Invoke("CountDownEnded", 0.5f);
+
+        }
+        
+    }
+    
+    void CountDownEnded()
+    {
+        coinFlipGameRunning = false;
+        countDownParent.SetActive(false);
+    }
+
 }
+
