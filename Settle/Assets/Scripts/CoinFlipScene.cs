@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CoinFlipScene : MonoBehaviour
 {
+    public Button exitButton;
     public GameObject oathPopUpNotif;
     public GameObject touchIds;
     public RawImage touchIdTop;
@@ -13,16 +15,80 @@ public class CoinFlipScene : MonoBehaviour
     private bool playerBotTouched;
     private bool isCheckingForTouches;
     public GameObject playersTouchError;
+
     public GameObject countDownParent;
     public Text countDownText;
     private float countDownTimer = 3.0f;
     private bool coinFlipGameRunning = false;
 
+    //implementation of the game 
+    public GameObject simpleCoins;
+    public RawImage winnerCoin;
+    public RawImage loserCoin;
+    private Transform chosenCoinTransform;
+    private bool hasPlayerChosen = false;
+    private bool implementCoinFlipRunning = false;
+    public Canvas canvas;
 
-   
+
     private void Start()
     {
+        if (exitButton != null)
+        {
+            exitButton.onClick.AddListener(OnExitButtonClick);
+        }
+        else
+        {
+            Debug.Log("Exit Button Not Found");
+        } 
+
         StartCoroutine(ShowOathPopUpAfterDelay(0.5f));
+    }
+
+    private void Update()
+    {
+        if (isCheckingForTouches)
+        {
+            CheckTouchInput();
+        }
+        if (coinFlipGameRunning)
+        {
+            Invoke("StartCountDown", 0f);
+        }
+        if (implementCoinFlipRunning && !hasPlayerChosen && Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                // Convert touch position to UI space
+                Vector2 touchPosition = touch.position;
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, touchPosition, Camera.main, out Vector2 localPoint);
+
+                // Check if the touch position is within any of the simple coins' RectTransform
+                RectTransform[] simpleCoinRectTransforms = simpleCoins.GetComponentsInChildren<RectTransform>();
+                foreach (RectTransform rectTransform in simpleCoinRectTransforms)
+                {
+                    if (RectTransformUtility.RectangleContainsScreenPoint(rectTransform, touch.position, Camera.main))
+                    {
+                        // Simple coin touched, proceed with the game logic
+                        ImplementCoinFlipGame(rectTransform.position);
+                        hasPlayerChosen = true;
+                        Debug.Log("ImplementCoinFlipGame called.");
+                        break; // Exit the loop once a coin is found
+                    }
+                }
+            }
+        }
+    }
+
+    public void OnExitButtonClick()
+    {
+        Application.Quit();
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+        #endif
+
     }
 
     IEnumerator ShowOathPopUpAfterDelay(float delay)
@@ -44,17 +110,7 @@ public class CoinFlipScene : MonoBehaviour
         Debug.Log("EnableTouchInputAfterDelay");
     }
 
-    private void Update()
-    {
-        if (isCheckingForTouches)
-        {
-            CheckTouchInput();
-        }
-        if (coinFlipGameRunning)
-        {
-            Invoke("StartCountDown",0f);
-        }
-    }
+    
 
     void CheckTouchInput()
     {
@@ -113,10 +169,28 @@ public class CoinFlipScene : MonoBehaviour
         isCheckingForTouches = false;
         touchIds.SetActive(false);
         coinFlipGameRunning = true;
-        
+        implementCoinFlipRunning = true;
+        simpleCoins.SetActive(true);
+
     }
 
-    IEnumerator ShowPlayersTouchErrorAndReset(float delay=0.1f)
+    //implement logic of choosing coins
+    void ImplementCoinFlipGame(Vector2 spawnPoint)
+    {
+        Debug.Log("Implementcoinflipgame");
+        
+        RawImage coinRawImage = Random.Range(0, 2) == 0 ? winnerCoin : loserCoin;
+        RawImage newCoin = Instantiate(coinRawImage);
+        // Set the parent to the canvas
+        newCoin.rectTransform.SetParent(canvas.transform, false);
+        // Position relative to the canvas
+        newCoin.rectTransform.anchoredPosition = spawnPoint;
+        implementCoinFlipRunning = false;
+    }
+
+
+    //If both of players dont touch the touchId shows up
+IEnumerator ShowPlayersTouchErrorAndReset(float delay=0.1f)
     {
         yield return new WaitForSeconds(delay);
         playersTouchError.SetActive(true);
@@ -130,6 +204,8 @@ public class CoinFlipScene : MonoBehaviour
         // Restart the touch input checking process
         StartCoroutine(CheckPlayersTouchedCoroutine());
     }
+
+    //starts CountDown from 3 to 1
     void StartCountDown()
     {
         countDownParent.SetActive(true);
@@ -144,6 +220,7 @@ public class CoinFlipScene : MonoBehaviour
         
     }
     
+    //Ends and disables CountDown
     void CountDownEnded()
     {
         coinFlipGameRunning = false;
